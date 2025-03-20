@@ -17,34 +17,47 @@
 }
 
 .cart-page {
-    padding: $spacing;
+    padding: $spacing * 2;
+    max-width: 1200px;
+    margin: 0 auto;
 
     h1 {
+        font-size: 2rem;
+        color: $primary-color;
         margin-bottom: $spacing * 2;
+        text-align: center;
     }
 
     .cart-items {
-        margin-bottom: $spacing * 2;
+        margin-bottom: $spacing * 3;
     }
 
     .cart-summary {
-        text-align: right;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 2rem;
+        padding: $spacing;
+        background-color: #f5f5f5;
+        border-radius: 8px;
 
         h3 {
-            margin-bottom: 1rem;
+            margin: 0;
+            font-size: 1.5rem;
             color: $primary-color;
         }
 
         .cart-actions {
             display: flex;
-            justify-content: flex-end;
             gap: 1rem;
 
             button {
                 padding: 0.75rem 1.5rem;
+                font-size: 1rem;
                 border: none;
-                border-radius: 4px;
+                border-radius: 6px;
                 cursor: pointer;
+                transition: background-color 0.2s ease;
 
                 &:first-child {
                     background-color: #e74c3c;
@@ -64,6 +77,149 @@
                     }
                 }
             }
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: $spacing;
+
+        .cart-item {
+            flex-direction: column;
+            text-align: center;
+
+            img {
+                margin: 0 0 $spacing 0;
+            }
+        }
+
+        .cart-summary {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+    }
+}
+
+.checkout-page {
+    padding: $spacing * 2;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    h1 {
+        font-size: 2rem;
+        color: $primary-color;
+        margin-bottom: $spacing * 2;
+        text-align: center;
+    }
+
+    .checkout-content {
+        display: flex;
+        gap: $spacing * 2;
+        flex-wrap: wrap;
+
+        .cart-summary {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f5f5f5;
+            padding: $spacing;
+            border-radius: 8px;
+
+            h2 {
+                font-size: 1.5rem;
+                color: $primary-color;
+                margin-bottom: $spacing;
+            }
+
+            ul {
+                list-style: none;
+                margin-bottom: $spacing;
+
+                li {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0.5rem 0;
+                    border-bottom: 1px solid #e0e0e0;
+
+                    span:last-child {
+                        color: $secondary-color;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            h3 {
+                text-align: right;
+                font-size: 1.5rem;
+                color: $primary-color;
+            }
+        }
+
+        .payment-form {
+            flex: 1;
+            min-width: 300px;
+
+            h2 {
+                font-size: 1.5rem;
+                color: $primary-color;
+                margin-bottom: $spacing;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: $spacing;
+
+                .form-group {
+                    display: flex;
+                    flex-direction: column;
+
+                    label {
+                        font-size: 1rem;
+                        color: $primary-color;
+                        margin-bottom: 0.25rem;
+                    }
+
+                    input {
+                        padding: 0.75rem;
+                        font-size: 1rem;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 4px;
+                        outline: none;
+
+                        &:focus {
+                            border-color: $primary-color;
+                        }
+                    }
+                }
+
+                button {
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                    background-color: $primary-color;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+
+                    &:hover {
+                        background-color: $secondary-color;
+                    }
+
+                    &:disabled {
+                        background-color: #ccc;
+                        cursor: not-allowed;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: $spacing;
+
+        .checkout-content {
+            flex-direction: column;
         }
     }
 }

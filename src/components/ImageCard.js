@@ -1,12 +1,26 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
+import { toast } from 'react-toastify';
 
 function ImageCard({ image }) {
     const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.cart.items);
 
     const handleAddToCart = () => {
-        dispatch(addToCart(image));
+        const isAlreadyInCart = cartItems.some((item) => item.id === image.id);
+        if (isAlreadyInCart) {
+            toast.warn('Item já está no carrinho!', {
+                position: 'top-right',
+                autoClose: 3000,
+            });
+        } else {
+            dispatch(addToCart(image));
+            toast.success('Item adicionado ao carrinho!', {
+                position: 'top-right',
+                autoClose: 3000,
+            });
+        }
     };
 
     return (

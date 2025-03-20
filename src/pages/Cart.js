@@ -9,12 +9,13 @@ function Cart() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const total = cartItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-    );
+    const total = cartItems.reduce((sum, item) => sum + item.price, 0);
 
     const handleCheckout = () => {
+        if (cartItems.length === 0) {
+            alert('O carrinho está vazio! Adicione itens antes de finalizar.');
+            return;
+        }
         navigate('/checkout');
     };
 
