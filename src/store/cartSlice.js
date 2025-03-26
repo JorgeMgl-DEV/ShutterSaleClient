@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Carrega o carrinho do localStorage ou usa um array vazio
 const loadCartFromStorage = () => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
@@ -17,17 +16,17 @@ const cartSlice = createSlice({
             const existingItem = state.items.find((i) => i.id === item.id);
             if (!existingItem) {
                 state.items.push(item);
-                localStorage.setItem('cart', JSON.stringify(state.items)); // Salva no localStorage
+                localStorage.setItem('cart', JSON.stringify(state.items));
             }
         },
         removeFromCart(state, action) {
             const id = action.payload;
             state.items = state.items.filter((item) => item.id !== id);
-            localStorage.setItem('cart', JSON.stringify(state.items)); // Atualiza o localStorage
+            localStorage.setItem('cart', JSON.stringify(state.items));
         },
         clearCart(state) {
             state.items = [];
-            localStorage.setItem('cart', JSON.stringify(state.items)); // Limpa o localStorage
+            localStorage.setItem('cart', JSON.stringify(state.items));
         },
     },
 });

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { clearCart } from '../store/cartSlice';
+import { toast } from 'react-toastify';
 
 function Checkout() {
     const cartItems = useSelector((state) => state.cart.items);
+    const user = useSelector((state) => state.user.user);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
+        name: user?.name || '',
+        email: user?.email || '',
     });
     const [loading, setLoading] = useState(false);
 
@@ -19,31 +22,46 @@ function Checkout() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (cartItems.length === 0) {
-            alert('O carrinho está vazio!');
+            toast.error('O carrinho está vazio!', {
+                position: 'top-right',
+                autoClose: 3000,
+            });
             return;
         }
 
         setLoading(true);
-        try {
-            // Enviar os dados para o back-end
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/payment/create`,
-                {
-                    items: cartItems,
-                    total,
-                    customer: formData,
-                }
-            );
 
-            // Assumindo que o back-end retorna uma URL de redirecionamento do PagSeguro
-            const { paymentUrl } = response.data;
-            window.location.href = paymentUrl; // Redireciona para o PagSeguro
+        // Simulação de pagamento (substituir por API PagSeguro no futuro)
+        try {
+            const purchase = {
+                id: Date.now(), // ID único baseado no timestamp
+                userEmail: user.email,
+                items: cartItems,
+                total,
+                date: new Date().toISOString(),
+            };
+
+            // Carrega o histórico existente e adiciona a nova compra
+            const purchaseHistory = JSON.parse(localStorage.getItem('purchaseHistory')) || [];
+            purchaseHistory.push(purchase);
+            localStorage.setItem('purchaseHistory', JSON.stringify(purchaseHistory));
+
+            // Limpa o carrinho
+            dispatch(clearCart());
+
+            toast.success('Compra realizada com sucesso!', {
+                position: 'top-right',
+                autoClose: 3000,
+            });
+            navigate('/profile'); // Redireciona para o perfil
         } catch (error) {
-            console.error('Erro ao processar pagamento:', error);
-            alert('Erro ao processar o pagamento. Tente novamente.');
+            toast.error('Erro ao processar a compra.', {
+                position: 'top-right',
+                autoClose: 3000,
+            });
         } finally {
             setLoading(false);
         }
@@ -102,7 +120,7 @@ function Checkout() {
                             />
                         </div>
                         <button type="submit" disabled={loading}>
-                            {loading ? 'Processando...' : 'Pagar com PagSeguro'}
+                            {loading ? 'Processando...' : 'Confirmar Compra'}
                         </button>
                     </form>
                 </section>

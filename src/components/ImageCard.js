@@ -1,34 +1,22 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/cartSlice';
-import { toast } from 'react-toastify';
 
-function ImageCard({ image }) {
+function ImageCard({ image, onClick }) {
     const dispatch = useDispatch();
-    const cartItems = useSelector((state) => state.cart.items);
 
     const handleAddToCart = () => {
-        const isAlreadyInCart = cartItems.some((item) => item.id === image.id);
-        if (isAlreadyInCart) {
-            toast.warn('Item já está no carrinho!', {
-                position: 'top-right',
-                autoClose: 3000,
-            });
-        } else {
-            dispatch(addToCart(image));
-            toast.success('Item adicionado ao carrinho!', {
-                position: 'top-right',
-                autoClose: 3000,
-            });
-        }
+        dispatch(addToCart(image));
     };
 
     return (
-        <div className="image-card">
+        <div className="image-card" onClick={onClick}>
             <img src={image.url} alt={image.title} />
-            <h4>{image.title}</h4>
+            <h3>{image.title}</h3>
             <p>R$ {image.price.toFixed(2)}</p>
-            <button onClick={handleAddToCart}>Adicionar ao Carrinho</button>
+            <button onClick={(e) => { e.stopPropagation(); handleAddToCart(); }}>
+                Adicionar ao Carrinho
+            </button>
         </div>
     );
 }
